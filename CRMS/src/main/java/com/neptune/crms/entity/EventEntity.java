@@ -4,15 +4,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
-public class Event {
+@Entity(name="event")
+public class EventEntity {
 
 	@Id
-	@Column(name="id")
+	@Column(name="id",nullable = false)
 	private int eventId;
-	@Column(name="name")
+	
+	@Column(name="value",nullable = false)
 	private String eventName;
-	
-	
-	
 }
