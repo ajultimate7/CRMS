@@ -3,18 +3,17 @@ package com.neptune.crms.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import lombok.Data;
 
 @Data
-@Entity(name="category")
+@Entity(name = "category")
 public class CategoryEntity {
 
 	@Id
-	@Column(name="id",nullable = false)
+	@Column(name = "id", nullable = false)
 	private int id;
-	
-	@Column(name="value",nullable = false)
+
+	@Column(name = "name", nullable = false)
 	private String name;
 }

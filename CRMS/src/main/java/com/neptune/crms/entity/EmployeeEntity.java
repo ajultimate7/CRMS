@@ -7,26 +7,25 @@ import javax.persistence.Id;
 import lombok.Data;
 
 @Data
-@Entity(name="Employee")
+@Entity(name = "employee")
 public class EmployeeEntity {
 
 	@Id
 	private int id;
-	
-	@Column(name="first_name",nullable = false)
+
+	@Column(name = "first_name", nullable = false)
 	private String firstName;
-	
-	@Column(name="last_name",nullable = false)
+
+	@Column(name = "last_name", nullable = false)
 	private String lastName;
-	
-	@Column(name="username",nullable = false)
+
+	@Column(name = "username", nullable = false)
 	private String username;
-	
-	@Column(name="email_id",nullable = false)
+
+	@Column(name = "email_id", nullable = false)
 	private String emailId;
-	
-	@Column(name="contact_no",nullable = false)
-	private int contactNo;
-	
-	
+
+	@Column(name = "contact_no", nullable = false)
+	private Long contactNo;
+
 }

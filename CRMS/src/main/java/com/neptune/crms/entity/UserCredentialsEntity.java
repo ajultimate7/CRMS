@@ -8,6 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import lombok.Data;
+
+@Data
 @Entity(name="user_credentials")
 public class UserCredentialsEntity implements Serializable{
 
@@ -21,4 +24,5 @@ public class UserCredentialsEntity implements Serializable{
 	
 	@Column(name="role",nullable = false)
 	private String role;
+	
 }

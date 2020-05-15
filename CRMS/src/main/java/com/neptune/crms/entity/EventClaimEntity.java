@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Data;
+
+@Data
 @Entity
 @DiscriminatorValue("1")
 public class EventClaimEntity extends ClaimEntity{
