@@ -3,19 +3,19 @@ package com.neptune.crms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.neptune.crms.business.service.EmployeeService;
 import com.neptune.crms.entity.EmployeeEntity;
 
-@Controller
-//@RequestMapping("/api")
+@RestController
+@RequestMapping("/api")
 public class EmployeeController {
 
 	@Autowired
@@ -37,6 +37,12 @@ public class EmployeeController {
 	public void addEmployee(@RequestBody EmployeeEntity employee) {
 		employeeService.addEmployee(employee);
 		System.out.println("Post Employee called");
+	}
+
+	@GetMapping("/getLast/{lName}")
+	public List<EmployeeEntity> get(@PathVariable String lName) {
+		System.out.println("Get by last name Employee called");
+		return employeeService.getByLastName(lName);
 	}
 
 }

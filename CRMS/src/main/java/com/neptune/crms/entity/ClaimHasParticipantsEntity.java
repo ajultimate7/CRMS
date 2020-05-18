@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import lombok.Data;
 
@@ -14,12 +14,12 @@ import lombok.Data;
 public class ClaimHasParticipantsEntity {
 
 	@Id
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "claim_id", nullable = false)
 	private ClaimEntity claimId;
 
 	@Id
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "employee_id", nullable = false)
 	private EmployeeEntity employeeId;
 

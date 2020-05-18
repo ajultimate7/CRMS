@@ -29,4 +29,9 @@ public class EmployeeService {
 		employeeDao.save(employee);
 	}
 
+	public List<EmployeeEntity> getByLastName(String lName) {
+		System.out.println("calling getbylastname");
+		return employeeDao.findByLastName(lName);
+	}
+
 }
