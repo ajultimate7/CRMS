@@ -3,6 +3,7 @@ package com.neptune.crms.business.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.neptune.crms.dao.ClaimDAO;
@@ -11,6 +12,7 @@ import com.neptune.crms.entity.ClaimEntity;
 @Service
 public class ClaimService {
 
+	@Autowired
 	private ClaimDAO claimDao;
 
 	public List<ClaimEntity> getAllClaims() {
@@ -32,6 +34,10 @@ public class ClaimService {
 				allClaimsByEmployee.add(claim);
 		}
 		return allClaimsByEmployee;
+	}
+
+	public void addClaim(ClaimEntity claim) {
+		claimDao.save(claim);
 	}
 
 }
