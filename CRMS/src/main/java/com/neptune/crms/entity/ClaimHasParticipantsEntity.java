@@ -15,12 +15,12 @@ public class ClaimHasParticipantsEntity {
 
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "claim_id", nullable = false)
-	private ClaimEntity claimId;
+	@JoinColumn(name = "ref_claim", nullable = false)
+	private SimpleClaimEntity claimId;
 
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "employee_id", nullable = false)
+	@JoinColumn(name = "ref_employee", nullable = false)
 	private EmployeeEntity employeeId;
 
 }

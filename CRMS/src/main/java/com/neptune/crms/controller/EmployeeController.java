@@ -21,26 +21,26 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	@GetMapping("/{id}")
-	public EmployeeEntity get(@PathVariable int id) {
+	@GetMapping("/employee/{id}")
+	public EmployeeEntity getById(@PathVariable int id) {
 		System.out.println("Get Employee called");
 		return employeeService.getEmployee(id);
 	}
 
-	@RequestMapping(value = "/getAll", produces = "application/json", method = RequestMethod.GET)
+	@RequestMapping(value = "/employee", produces = "application/json", method = RequestMethod.GET)
 	public List<EmployeeEntity> getAll() {
 		System.out.println("Got all employees");
 		return employeeService.getAllEmployees();
 	}
 
-	@PostMapping("/")
+	@PostMapping("/employee")
 	public void addEmployee(@RequestBody EmployeeEntity employee) {
 		employeeService.addEmployee(employee);
 		System.out.println("Post Employee called");
 	}
 
-	@GetMapping("/getLast/{lName}")
-	public List<EmployeeEntity> get(@PathVariable String lName) {
+	@GetMapping("/employee/{lName}")
+	public List<EmployeeEntity> getByLastName(@PathVariable String lName) {
 		System.out.println("Get by last name Employee called");
 		return employeeService.getByLastName(lName);
 	}

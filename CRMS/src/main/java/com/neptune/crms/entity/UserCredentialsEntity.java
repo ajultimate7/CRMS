@@ -11,18 +11,18 @@ import javax.persistence.OneToOne;
 import lombok.Data;
 
 @Data
-@Entity(name="user_credentials")
-public class UserCredentialsEntity implements Serializable{
+@Entity(name = "user_credentials")
+public class UserCredentialsEntity implements Serializable {
 
 	@Id
 	@OneToOne
-	@JoinColumn(name="username",referencedColumnName = "username",nullable = false,unique = true)
+	@JoinColumn(name = "ref_employee_username", referencedColumnName = "username", nullable = false, unique = true)
 	private EmployeeEntity username;
-	
-	@Column(name="password",nullable = false)
+
+	@Column(name = "password", nullable = false)
 	private String password;
-	
-	@Column(name="role",nullable = false)
+
+	@Column(name = "role", nullable = false)
 	private String role;
-	
+
 }

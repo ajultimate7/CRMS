@@ -9,24 +9,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.neptune.crms.business.service.CategoryService;
-import com.neptune.crms.entity.CategoryEntity;
+import com.neptune.crms.business.service.EventService;
+import com.neptune.crms.entity.EventEntity;
 
 @RestController
 @RequestMapping("/api")
-public class CategoryController {
+public class EventController {
 
 	@Autowired
-	private CategoryService categoryService;
+	private EventService eventService;
 
-	@GetMapping("/category")
-	public List<CategoryEntity> getAll() {
-		return categoryService.getAll();
+	@GetMapping("/events")
+	public List<EventEntity> getAll() {
+		return eventService.getAll();
 	}
 
-	@PostMapping("/category")
-	public void addCategory(@RequestBody CategoryEntity category) {
-		categoryService.addCategory(category);
+	@PostMapping("/events")
+	public void addCategory(@RequestBody EventEntity event) {
+		eventService.addEvent(event);
 	}
 
 }

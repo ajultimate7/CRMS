@@ -3,9 +3,6 @@ package com.neptune.crms.entity;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -19,18 +16,12 @@ import lombok.Data;
 
 @Data
 @Entity(name = "claim")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "claimType", discriminatorType = DiscriminatorType.INTEGER)
-@DiscriminatorValue("0")
-public class ClaimEntity {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class ClaimEntity {
 
 	@Id
 	@Column(name = "claim_id", nullable = false)
 	private String claimId;
-
-	@ManyToOne
-	@JoinColumn(name = "ref_category", nullable = false)
-	private CategoryEntity category;
 
 	@Column(name = "amount", nullable = false)
 	private int amount;
@@ -54,7 +45,7 @@ public class ClaimEntity {
 	private String description;
 
 	@ManyToOne
-	@JoinColumn(name = "fk_employee_id", nullable = false)
+	@JoinColumn(name = "ref_employee", nullable = false)
 	private EmployeeEntity applicant;
 
 	@Column(name = "status")
@@ -63,7 +54,8 @@ public class ClaimEntity {
 	@Column(name = "approver_remarks")
 	private String approverRemarks;
 
-	@Column(name = "processed_by")
-	private String processedBy;
+	@ManyToOne
+	@JoinColumn(name = "ref_processed_by_employee")
+	private EmployeeEntity processedBy;
 
 }

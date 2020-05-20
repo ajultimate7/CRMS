@@ -11,37 +11,37 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.neptune.crms.business.service.ClaimService;
-import com.neptune.crms.entity.ClaimEntity;
+import com.neptune.crms.business.service.SimpleClaimService;
+import com.neptune.crms.entity.SimpleClaimEntity;
 
 @RestController
 @RequestMapping("/api")
-public class ClaimController {
+public class SimpleClaimController {
 
 	@Autowired
-	private ClaimService claimService;
+	private SimpleClaimService simpleClaimService;
 
 	@GetMapping("/claims/{id}")
-	public ClaimEntity get(@PathVariable String id) {
+	public SimpleClaimEntity getById(@PathVariable String id) {
 		System.out.println("Get claim by id called");
-		return claimService.getById(id);
+		return simpleClaimService.getById(id);
 	}
 
-	@RequestMapping(value = "/claims/getAll", produces = "application/json", method = RequestMethod.GET)
-	public List<ClaimEntity> getAll() {
+	@RequestMapping(value = "/claims", produces = "application/json", method = RequestMethod.GET)
+	public List<SimpleClaimEntity> getAll() {
 		System.out.println("Got all claims");
-		return claimService.getAllClaims();
+		return simpleClaimService.getAllClaims();
 	}
 
-	@GetMapping("/claims/byEmpId/{id}")
-	public List<ClaimEntity> getByEmployeeId(int id) {
+	@GetMapping("/claims/{employee_id}")
+	public List<SimpleClaimEntity> getByEmployeeId(int employee_id) {
 		System.out.println("Get By Employee Id called");
-		return claimService.getByEmployeeId(id);
+		return simpleClaimService.getByEmployeeId(employee_id);
 	}
 
-	@PostMapping("/claims/save")
-	public void addClaim(@RequestBody ClaimEntity claim) {
-		claimService.addClaim(claim);
+	@PostMapping("/claims")
+	public void addSimpleClaim(@RequestBody SimpleClaimEntity claim) {
+		simpleClaimService.addClaim(claim);
 	}
 
 }

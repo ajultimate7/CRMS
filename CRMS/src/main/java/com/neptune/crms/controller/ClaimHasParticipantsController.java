@@ -17,14 +17,14 @@ public class ClaimHasParticipantsController {
 	@Autowired
 	private ClaimaHasParticipantsService claimHasParticipantsService;
 
-	@GetMapping("/claimHasParticipants/getByClaimId/{id}")
+	@GetMapping("/claimHasParticipants/{id}")
 	public List<ClaimHasParticipantsEntity> getAllByClaimId(String claimId) {
 		return claimHasParticipantsService.getByClaimId(claimId);
 	}
 
-	@GetMapping("/claimHasParticipants/getByEmployeeId/{id}")
-	public List<ClaimHasParticipantsEntity> getAllByEmployeeId(int id) {
-		return claimHasParticipantsService.getByEmployeeId(id);
+	@GetMapping("/claimHasParticipants/{employee_id}")
+	public List<ClaimHasParticipantsEntity> getAllByEmployeeId(int employee_id) {
+		return claimHasParticipantsService.getByEmployeeId(employee_id);
 	}
 
 }
