@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.neptune.crms.business.service.EmployeeService;
 import com.neptune.crms.entity.EmployeeEntity;
+import com.neptune.crms.mapper.EmployeeMapper;
 
 @RestController
 @RequestMapping("/api")
@@ -21,7 +22,9 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	@GetMapping("/employee/{id}")
+	private EmployeeMapper mapper;
+
+	@GetMapping("/employee/id/{id}")
 	public EmployeeEntity getById(@PathVariable int id) {
 		System.out.println("Get Employee called");
 		return employeeService.getEmployee(id);
@@ -35,11 +38,11 @@ public class EmployeeController {
 
 	@PostMapping("/employee")
 	public void addEmployee(@RequestBody EmployeeEntity employee) {
-		employeeService.addEmployee(employee);
+		employeeService.save(mapper.employeeEntityToInDTO(employee));
 		System.out.println("Post Employee called");
 	}
 
-	@GetMapping("/employee/{lName}")
+	@GetMapping("/employee/lName/{lName}")
 	public List<EmployeeEntity> getByLastName(@PathVariable String lName) {
 		System.out.println("Get by last name Employee called");
 		return employeeService.getByLastName(lName);

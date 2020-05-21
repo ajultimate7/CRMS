@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Entity(name = "event_claim")
-@PrimaryKeyJoinColumn(name = "claim_id")
+@PrimaryKeyJoinColumn(name = "ref_claim")
 public class EventClaimEntity extends ClaimEntity {
 
 //	@Column(name = "claim_id", nullable = false)

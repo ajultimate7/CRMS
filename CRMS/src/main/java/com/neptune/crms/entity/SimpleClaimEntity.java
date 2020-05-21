@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity(name = "simple_claim")
-@PrimaryKeyJoinColumn(name = "claim_id")
+@PrimaryKeyJoinColumn(name = "ref_claim")
 public class SimpleClaimEntity extends ClaimEntity {
 
 //	@OneToOne

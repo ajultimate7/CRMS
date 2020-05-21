@@ -2,6 +2,7 @@ package com.neptune.crms.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import lombok.Data;
@@ -11,6 +12,7 @@ import lombok.Data;
 public class EmployeeEntity {
 
 	@Id
+	@GeneratedValue
 	private int id;
 
 	@Column(name = "first_name", nullable = false)

@@ -21,7 +21,7 @@ public class SimpleClaimController {
 	@Autowired
 	private SimpleClaimService simpleClaimService;
 
-	@GetMapping("/claims/{id}")
+	@GetMapping("/claims/id/{id}")
 	public SimpleClaimEntity getById(@PathVariable String id) {
 		System.out.println("Get claim by id called");
 		return simpleClaimService.getById(id);
@@ -33,7 +33,7 @@ public class SimpleClaimController {
 		return simpleClaimService.getAllClaims();
 	}
 
-	@GetMapping("/claims/{employee_id}")
+	@GetMapping("/claims/eId/{employee_id}")
 	public List<SimpleClaimEntity> getByEmployeeId(int employee_id) {
 		System.out.println("Get By Employee Id called");
 		return simpleClaimService.getByEmployeeId(employee_id);
