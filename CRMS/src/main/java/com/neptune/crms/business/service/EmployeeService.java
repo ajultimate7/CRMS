@@ -40,10 +40,26 @@ public class EmployeeService {
 	}
 
 	public EmployeeDTO save(EmployeeInDTO emp) {
-		EmployeeEntity empEntity = mapper.employeeInDTOToEntity(emp);
-		empEntity = employeeDao.save(empEntity);
+		System.out.println("Converting InDTO to Entity");
+		EmployeeEntity empEntity = new EmployeeEntity();
+		empEntity = mapper.employeeInDTOToEntity(emp);
+		System.out.println("Conversion completed");
 
+		System.out.println("Adding username to entity");
+		empEntity.setUsername(empEntity.getFirstName() + "." + empEntity.getLastName());
+		System.out.println("Addition done");
+
+		System.out.println("Adding email id to entity");
+		empEntity.setEmailId(empEntity.getFirstName() + "." + empEntity.getLastName() + "@neptune.com");
+		System.out.println("Addition done");
+
+		System.out.println("Saving employee entity");
+		empEntity = employeeDao.save(empEntity);
+		System.out.println("Save done");
+
+		System.out.println("Creating DTO from Entity");
 		EmployeeDTO empDto = mapper.employeeEntityToDTO(empEntity);
+		System.out.println("Creation done");
 		return empDto;
 	}
 

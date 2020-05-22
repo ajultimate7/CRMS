@@ -3,6 +3,7 @@ package com.neptune.crms.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.Data;
@@ -12,7 +13,8 @@ import lombok.Data;
 public class EmployeeEntity {
 
 	@Id
-	@GeneratedValue
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name = "first_name", nullable = false)
@@ -21,10 +23,10 @@ public class EmployeeEntity {
 	@Column(name = "last_name", nullable = false)
 	private String lastName;
 
-	@Column(name = "username", nullable = false)
+	@Column(name = "username")
 	private String username;
 
-	@Column(name = "email_id", nullable = false)
+	@Column(name = "email_id")
 	private String emailId;
 
 	@Column(name = "contact_no", nullable = false)

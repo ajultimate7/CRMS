@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.neptune.crms.business.service.EmployeeService;
 import com.neptune.crms.entity.EmployeeEntity;
+import com.neptune.crms.indto.EmployeeInDTO;
 import com.neptune.crms.mapper.EmployeeMapper;
 
 @RestController
@@ -37,9 +38,9 @@ public class EmployeeController {
 	}
 
 	@PostMapping("/employee")
-	public void addEmployee(@RequestBody EmployeeEntity employee) {
-		employeeService.save(mapper.employeeEntityToInDTO(employee));
-		System.out.println("Post Employee called");
+	public void addEmployee(@RequestBody EmployeeInDTO employee) {
+		System.out.println("Post mapping add employee called");
+		employeeService.save(employee);
 	}
 
 	@GetMapping("/employee/lName/{lName}")
