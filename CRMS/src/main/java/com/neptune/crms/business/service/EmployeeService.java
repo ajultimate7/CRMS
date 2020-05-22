@@ -18,6 +18,7 @@ public class EmployeeService {
 	@Autowired
 	private EmployeeDAO employeeDao;
 
+	@Autowired
 	private EmployeeMapper mapper;
 
 	public List<EmployeeEntity> getAllEmployees() {
@@ -26,8 +27,8 @@ public class EmployeeService {
 		return employees;
 	}
 
-	public EmployeeEntity getEmployee(int id) {
-		return employeeDao.findById(id).get();
+	public EmployeeDTO getEmployee(int id) {
+		return mapper.employeeEntityToDTO(employeeDao.findById(id).get());
 	}
 
 	public void addEmployee(EmployeeEntity employee) {

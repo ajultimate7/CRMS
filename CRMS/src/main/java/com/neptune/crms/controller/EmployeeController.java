@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neptune.crms.business.service.EmployeeService;
+import com.neptune.crms.dto.EmployeeDTO;
 import com.neptune.crms.entity.EmployeeEntity;
 import com.neptune.crms.indto.EmployeeInDTO;
-import com.neptune.crms.mapper.EmployeeMapper;
 
 @RestController
 @RequestMapping("/api")
@@ -23,10 +23,8 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
-	private EmployeeMapper mapper;
-
 	@GetMapping("/employee/id/{id}")
-	public EmployeeEntity getById(@PathVariable int id) {
+	public EmployeeDTO getById(@PathVariable int id) {
 		System.out.println("Get Employee called");
 		return employeeService.getEmployee(id);
 	}
