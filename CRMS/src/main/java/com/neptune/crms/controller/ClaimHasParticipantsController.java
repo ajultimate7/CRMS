@@ -23,7 +23,7 @@ public class ClaimHasParticipantsController {
 		return claimHasParticipantsService.getByClaimId(id);
 	}
 
-	@GetMapping("?byEmployee/{employeeId}")
+	@GetMapping("?employeeId/{employeeId}")
 	public List<ClaimHasParticipantsDTO> getAllByEmployeeId(@PathVariable int employeeId) {
 		return claimHasParticipantsService.getByEmployeeId(employeeId);
 	}
