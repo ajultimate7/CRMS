@@ -16,7 +16,7 @@ public class ClaimHasParticipantsEntity {
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "ref_claim", nullable = false)
-	private SimpleClaimEntity claimId;
+	private ClaimEntity id;
 
 	@Id
 	@ManyToOne

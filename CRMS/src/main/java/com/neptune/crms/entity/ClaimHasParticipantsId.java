@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 import lombok.Data;
 
-
 @Data
-public class ClaimHasParticipantsId implements Serializable{
-	
-	private String claimId;
+public class ClaimHasParticipantsId implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private int claimId;
 	private int employeeId;
 
 }

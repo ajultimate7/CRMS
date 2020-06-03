@@ -9,8 +9,8 @@ import com.neptune.crms.entity.ClaimHasParticipantsId;
 
 public interface ClaimHasParticipantsDAO extends CrudRepository<ClaimHasParticipantsEntity, ClaimHasParticipantsId> {
 
-	List<ClaimHasParticipantsEntity> findAllByClaimId(String claimId);
+	List<ClaimHasParticipantsEntity> findByClaimId(int id);
 
-	List<ClaimHasParticipantsEntity> findAllByEmployeeId(int id);
+	List<ClaimHasParticipantsEntity> findByEmployeeId(int id);
 
 }

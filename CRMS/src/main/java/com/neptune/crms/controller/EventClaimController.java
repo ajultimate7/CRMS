@@ -10,28 +10,29 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.neptune.crms.business.service.EventClaimService;
-import com.neptune.crms.entity.EventClaimEntity;
+import com.neptune.crms.business.serviceimpl.EventClaimServiceImpl;
+import com.neptune.crms.dto.EventClaimDTO;
+import com.neptune.crms.indto.EventClaimInDTO;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/eventClaim/")
 public class EventClaimController {
 
 	@Autowired
-	private EventClaimService eventClaimService;
+	private EventClaimServiceImpl eventClaimService;
 
-	@GetMapping("/eventClaim")
-	public List<EventClaimEntity> getAll() {
+	@GetMapping
+	public List<EventClaimDTO> getAll() {
 		return eventClaimService.getAllEventClaims();
 	}
 
-	@GetMapping("/eventClaim/{id}")
-	public EventClaimEntity getById(@PathVariable String id) {
+	@GetMapping("{id}")
+	public EventClaimDTO getById(@PathVariable int id) {
 		return eventClaimService.getById(id);
 	}
 
-	@PostMapping("/eventClaim")
-	public void addEventClaim(@RequestBody EventClaimEntity eventClaim) {
+	@PostMapping
+	public void addEventClaim(@RequestBody EventClaimInDTO eventClaim) {
 		eventClaimService.addEventClaim(eventClaim);
 	}
 

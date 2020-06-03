@@ -4,27 +4,28 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.neptune.crms.business.service.ClaimaHasParticipantsService;
-import com.neptune.crms.entity.ClaimHasParticipantsEntity;
+import com.neptune.crms.business.serviceimpl.ClaimHasParticipantsServiceImpl;
+import com.neptune.crms.dto.ClaimHasParticipantsDTO;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/claimHasParticipants/")
 public class ClaimHasParticipantsController {
 
 	@Autowired
-	private ClaimaHasParticipantsService claimHasParticipantsService;
+	private ClaimHasParticipantsServiceImpl claimHasParticipantsService;
 
-	@GetMapping("/claimHasParticipants/{id}")
-	public List<ClaimHasParticipantsEntity> getAllByClaimId(String claimId) {
-		return claimHasParticipantsService.getByClaimId(claimId);
+	@GetMapping("{id}")
+	public List<ClaimHasParticipantsDTO> getAllByClaimId(@PathVariable int id) {
+		return claimHasParticipantsService.getByClaimId(id);
 	}
 
-	@GetMapping("/claimHasParticipants/{employee_id}")
-	public List<ClaimHasParticipantsEntity> getAllByEmployeeId(int employee_id) {
-		return claimHasParticipantsService.getByEmployeeId(employee_id);
+	@GetMapping("?byEmployee/{employeeId}")
+	public List<ClaimHasParticipantsDTO> getAllByEmployeeId(@PathVariable int employeeId) {
+		return claimHasParticipantsService.getByEmployeeId(employeeId);
 	}
 
 }

@@ -17,5 +17,5 @@ public class EventClaimEntity extends ClaimEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "ref_event", nullable = false)
-	private EventEntity refEvent;
+	private EventEntity event;
 }

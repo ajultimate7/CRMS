@@ -9,10 +9,10 @@ import com.neptune.crms.indto.EmployeeInDTO;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
-	EmployeeDTO employeeEntityToDTO(EmployeeEntity emp);
+	EmployeeDTO entityToDTO(EmployeeEntity emp);
 
-	EmployeeInDTO employeeEntityToInDTO(EmployeeEntity emp);
+	EmployeeEntity inDTOToEntity(EmployeeInDTO emp);
 
-	EmployeeEntity employeeInDTOToEntity(EmployeeInDTO emp);
+	EmployeeEntity DTOToEntity(EmployeeDTO emp);
 
 }

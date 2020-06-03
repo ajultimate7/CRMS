@@ -23,10 +23,10 @@ public class EmployeeEntity {
 	@Column(name = "last_name", nullable = false)
 	private String lastName;
 
-	@Column(name = "username")
+	@Column(name = "username", nullable = false)
 	private String username;
 
-	@Column(name = "email_id")
+	@Column(name = "email_id", nullable = false)
 	private String emailId;
 
 	@Column(name = "contact_no", nullable = false)

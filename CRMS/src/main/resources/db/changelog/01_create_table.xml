@@ -8,7 +8,7 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    
 	<changeSet id="1" author="nit160">
 	    <createTable tableName="category" remarks="category_names">
-			<column name="id" type="integer">
+			<column name="id" type="integer" autoIncrement="true">
 			  	<constraints primaryKey="true" primaryKeyName="pk_category" nullable="false" />
 			</column>
 			<column name="name" type="varchar(32)">
@@ -20,7 +20,7 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    
 	<changeSet id="2" author="nit160">
 		<createTable tableName="event" remarks="event_names">
-   			<column name="id" type="integer">
+   			<column name="id" type="integer" autoIncrement="true">
    				<constraints primaryKey="true" primaryKeyName="pk_event" nullable="false"/>
    			</column>
    			<column name="name" type="varchar(32)">
@@ -32,7 +32,7 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    	
    	<changeSet id="3" author="nit160">
    		<createTable tableName="employee" remarks="employee_details">
-   			<column name="id" type="integer">
+   			<column name="id" type="integer" autoIncrement="true">
    				<constraints primaryKey="true" primaryKeyName="pk_employee" nullable="false"/>
    			</column>
    			<column name="first_name" type="varchar(16)">
@@ -57,7 +57,7 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    	
    	<changeSet id="4" author="nit160">
    		<createTable tableName="claim" remarks="claim_details">
-   			<column name="claim_id" type="varchar(16)">
+   			<column name="id" type="integer" autoIncrement="true">
    				<constraints primaryKey="true" primaryKeyName="pk_claim" nullable="false"/>
    			</column>
    			<column name="amount" type="decimal(12,2)">
@@ -72,6 +72,9 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    			<column name="date_created" type="timestamp">
    				<constraints nullable="false"/>
    			</column>
+   			<column name="bill_date" type="timestamp">
+   				<constraints nullable="false"/>
+   			</column>
    			<column name="bill_no" type="varchar(64)">
    				<constraints nullable="false"/>
    			</column>
@@ -84,6 +87,11 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    			<column name="ref_employee" type="integer">
    				<constraints nullable="false"/>
    			</column>
+   			
+   			<!-- <column name="participants" type="varchar(32)">
+   				<constraints nullable="false"/>
+   			</column> -->
+   			
    			<column name="status" type="integer">
    				<constraints nullable="false"/>
    			</column>
@@ -91,6 +99,9 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    				<constraints nullable="true"/>
    			</column>
    			<column name="ref_processed_by_employee" type="integer">
+   			</column>
+   			<column name="claim_id" type="varchar(16)">
+   				<constraints nullable="true"/>
    			</column>
    		</createTable>
    		<addForeignKeyConstraint constraintName="fk_claim_ref_employee" referencedTableName="employee"
@@ -102,7 +113,7 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    	
    	<changeSet id="5" author="nit160">
    		<createTable tableName="simple_claim">
-   			<column name="ref_claim" type="varchar(16)">
+   			<column name="ref_claim" type="integer">
    				<constraints primaryKey="true" primaryKeyName="pk_simple_claim" nullable="false"/>
    			</column>
    			<column name="ref_category" type="integer">
@@ -112,12 +123,12 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    		<addForeignKeyConstraint constraintName="fk_simple_claim_ref_category" referencedTableName="category" 
    		referencedColumnNames="id" baseColumnNames="ref_category" baseTableName="simple_claim" />
    		<addForeignKeyConstraint constraintName="fk_simple_claim_ref_claim" referencedTableName="claim" 
-   		referencedColumnNames="claim_id" baseColumnNames="ref_claim" baseTableName="simple_claim" />
+   		referencedColumnNames="id" baseColumnNames="ref_claim" baseTableName="simple_claim" />
    	</changeSet>
    	
    	<changeSet id="6" author="nit160">
    		<createTable tableName="event_claim">
-   			<column name="ref_claim" type="varchar(16)">
+   			<column name="ref_claim" type="integer">
    				<constraints primaryKey="true" primaryKeyName="pk_event_claim" nullable="false"/>
    			</column>
    			<column name="ref_event" type="integer">
@@ -127,13 +138,13 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    		<addForeignKeyConstraint constraintName="fk_event_claim_ref_event" referencedTableName="event" 
    		referencedColumnNames="id" baseColumnNames="ref_event" baseTableName="event_claim"/>
    		<addForeignKeyConstraint constraintName="fk_event_claim_ref_claim" referencedTableName="claim" 
-   		referencedColumnNames="claim_id" baseColumnNames="ref_claim" baseTableName="event_claim"/>
+   		referencedColumnNames="id" baseColumnNames="ref_claim" baseTableName="event_claim"/>
    	</changeSet>
    	
    	
    	<changeSet id="7" author="nit160">
    		<createTable tableName="claim_has_participants">
-   			<column name="ref_claim" type="varchar(16)">
+   			<column name="ref_claim" type="integer">
    				<constraints primaryKey="true" primaryKeyName="pk_claim_has_participants_ref_claim" nullable="false"/>
    			</column>
    			<column name="ref_employee" type="integer">
@@ -141,7 +152,7 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    			</column>
    		</createTable>
    		<addForeignKeyConstraint constraintName="fk_claim_has_participants_ref_claim" referencedTableName="claim" 
-   		referencedColumnNames="claim_Id" baseColumnNames="ref_claim" baseTableName="claim_has_participants"/>
+   		referencedColumnNames="id" baseColumnNames="ref_claim" baseTableName="claim_has_participants"/>
    		<addForeignKeyConstraint constraintName="fk_claim_has_participants_ref_employee" referencedTableName="employee" 
    		referencedColumnNames="id" baseColumnNames="ref_employee" baseTableName="claim_has_participants" />
    	</changeSet>
