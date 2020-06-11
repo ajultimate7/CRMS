@@ -8,12 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.neptune.crms.business.service.ClaimHasParticipantsService;
+import com.neptune.crms.business.service.ClaimService;
+import com.neptune.crms.business.service.EmployeeService;
+import com.neptune.crms.business.serviceUtil.EmployeeUtil;
 import com.neptune.crms.dao.ClaimHasParticipantsDAO;
 import com.neptune.crms.dto.ClaimHasParticipantsDTO;
 import com.neptune.crms.entity.ClaimEntity;
 import com.neptune.crms.entity.ClaimHasParticipantsEntity;
+import com.neptune.crms.entity.QClaimHasParticipantsEntity;
+import com.neptune.crms.exceptions.NoSuchEmployeeExceptions;
 import com.neptune.crms.mapper.ClaimHasParticipantsMapper;
 import com.neptune.crms.mapper.EmployeeMapper;
+import com.querydsl.core.types.dsl.BooleanExpression;
 
 @Service
 public class ClaimHasParticipantsServiceImpl implements ClaimHasParticipantsService {
@@ -21,49 +27,74 @@ public class ClaimHasParticipantsServiceImpl implements ClaimHasParticipantsServ
 	@Autowired
 	private ClaimHasParticipantsDAO claimHasParticipantsDao;
 
-//	@Autowired
-//	private ClaimServiceImpl claimService;
+	@Autowired
+	private EmployeeService employeeService;
 
 	@Autowired
-	private EmployeeServiceImpl employeeService;
-
-//	@Autowired
-//	private ClaimServiceImpl claimService;
-
-	@Autowired
-	private ClaimHasParticipantsMapper mapper;
+	private ClaimHasParticipantsMapper claimHasParticipantsMapper;
 
 	@Autowired
 	private EmployeeMapper employeeMapper;
 
-//	@Autowired
-//	private SimpleClaimMapper simpleClaimMapper;
+	@Autowired
+	private ClaimService claimService;
+
+	@Autowired
+	private EmployeeUtil employeeUtil;
 
 	@Override
-	public List<ClaimHasParticipantsDTO> getByClaimId(int claimId) {
-		List<ClaimHasParticipantsEntity> allParticipants = new ArrayList<>();
-		System.out.println("Fetching all CHP_entities by claim id");
-		// claimService.getById(claimId).forEach(allParticipants::add);
-		System.out.println("Done fetching all CHP_entities by claim id");
-		return allParticipants.stream().map(mapper::entityToDTO).collect(Collectors.toList());
+	public List<ClaimHasParticipantsDTO> getByClaimEntity(ClaimEntity claimEntity) {
+		List<ClaimHasParticipantsEntity> entities = new ArrayList<>();
+		entities = claimHasParticipantsDao.findAllByClaimEntity(claimEntity);
+		QClaimHasParticipantsEntity claimHasParticipantsEntity = QClaimHasParticipantsEntity.claimHasParticipantsEntity;
+		BooleanExpression hasClaim = claimHasParticipantsEntity.claimEntity.eq(claimEntity);
+		List<ClaimHasParticipantsEntity> testList = new ArrayList<>();
+		claimHasParticipantsDao.findAll(hasClaim).forEach(testList::add);
+		System.out.println(testList.size());
+		return entities.stream().map(claimHasParticipantsMapper::entityToDTO).collect(Collectors.toList());
+		// .forEach(claimHasParticipantsmapper::entityToDTO);
 	}
 
 	@Override
-	public List<ClaimHasParticipantsDTO> getByEmployeeId(int employeeId) {
-		List<ClaimHasParticipantsEntity> allParticipants = new ArrayList<>();
-		claimHasParticipantsDao.findByEmployeeId(employeeId).forEach(allParticipants::add);
-		return allParticipants.stream().map(mapper::entityToDTO).collect(Collectors.toList());
+	public List<ClaimHasParticipantsEntity> findByClaimEntity(ClaimEntity claimEntity) {
+		return claimHasParticipantsDao.findAllByClaimEntity(claimEntity);
 	}
 
 	@Override
-	public void addParticipants(List<Integer> participantIds, ClaimEntity claimEntity) {
-		for (int id : participantIds) {
-			ClaimHasParticipantsEntity claimHasParticipantsentity = new ClaimHasParticipantsEntity();
-			claimHasParticipantsentity.setId(claimEntity);
-			claimHasParticipantsentity.setEmployeeId(employeeMapper.DTOToEntity(employeeService.getEmployee(id)));
-			claimHasParticipantsDao.save(claimHasParticipantsentity);
+	public List<ClaimHasParticipantsEntity> addParticipants(List<Integer> participantIds, ClaimEntity claimEntity) {
+		List<ClaimHasParticipantsEntity> claimHasParticipantsList = claimEntity.getClaimHasParticipants();
+		if (claimHasParticipantsList == null) {
+			claimHasParticipantsList = new ArrayList<>();
+			for (int id : participantIds) {
+				if (!employeeService.checkAuthority(id))
+					throw new NoSuchEmployeeExceptions("The employee id" + id + " is not active");
+				ClaimHasParticipantsEntity claimHasParticipantsentity = new ClaimHasParticipantsEntity();
+				claimHasParticipantsentity.setClaimEntity(claimEntity);
+				claimHasParticipantsentity.setEmployeeEntity(employeeUtil.getById(id));
+				claimHasParticipantsList.add(claimHasParticipantsentity);
+			}
+			if (participantIds.size() == claimHasParticipantsList.size()) {
+				// claimHasParticipantsDao.saveAll(claimHasParticipantsList);
+				return claimHasParticipantsList;
+			} else {
+				System.out.println("inside else after throwing exception of invalid employee");
+				return null;
+			}
+//			if (participantIds.size() != participantsList.size()) {
+//				throw new BadRequestException(
+//						"All the passed participant employees are not valid employees, raising the claim without adding participants");
+//			}
 		}
 
+		else {
+			// List<ClaimHasParticipantsEntity> participantsList =
+			// findByClaimEntity(claimEntity);
+			for (ClaimHasParticipantsEntity entity : claimHasParticipantsList) {
+				claimHasParticipantsDao.deleteById(entity.getId());
+			}
+			return addParticipants(participantIds, claimEntity);
+		}
+		// return claimHasParticipantsList;
 	}
 
 }

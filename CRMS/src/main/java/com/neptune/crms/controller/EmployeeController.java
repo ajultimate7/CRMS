@@ -3,16 +3,18 @@ package com.neptune.crms.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.neptune.crms.business.serviceimpl.EmployeeServiceImpl;
+import com.neptune.crms.business.service.EmployeeService;
 import com.neptune.crms.dto.EmployeeDTO;
+import com.neptune.crms.enums.EmployeeStatus;
 import com.neptune.crms.indto.EmployeeInDTO;
 
 @RestController
@@ -20,17 +22,12 @@ import com.neptune.crms.indto.EmployeeInDTO;
 public class EmployeeController {
 
 	@Autowired
-	private EmployeeServiceImpl employeeService;
-
-	@GetMapping("{id}")
-	public EmployeeDTO getById(@PathVariable int id) {
-		System.out.println("Get Employee called");
-		return employeeService.getEmployee(id);
-	}
+	private EmployeeService employeeService;
 
 	@GetMapping
-	public List<EmployeeDTO> getAll() {
-		return employeeService.getAllEmployees();
+	public List<EmployeeDTO> getEmployees(@RequestParam(required = false) String lastName,
+			@RequestParam(required = false) String firstName, @RequestParam(required = false) EmployeeStatus status) {
+		return employeeService.getEmployees(lastName, firstName, status);
 	}
 
 	@PostMapping
@@ -39,21 +36,14 @@ public class EmployeeController {
 		employeeService.save(employee);
 	}
 
-	@GetMapping("?lName{lName}")
-	public List<EmployeeDTO> getByLastName(@PathVariable String lName) {
-		System.out.println("Get by last name Employee called");
-		return employeeService.getByLastName(lName);
+	@PatchMapping("activate/{id}")
+	public EmployeeDTO activateEmployee(@PathVariable int id) {
+		return employeeService.activateEmployee(id);
 	}
 
-	@GetMapping("?fName/{fName}")
-	public List<EmployeeDTO> getByFirstName(@PathVariable String fName) {
-		System.out.println("Get by first name Employee called");
-		return employeeService.getByLastName(fName);
-	}
-
-	@DeleteMapping
-	public void deleteById(int id) {
-		employeeService.deleteById(id);
+	@PatchMapping("deactivate/{id}")
+	public EmployeeDTO deactivateEmployee(@PathVariable int id) {
+		return employeeService.deactivateEmployee(id);
 	}
 
 }

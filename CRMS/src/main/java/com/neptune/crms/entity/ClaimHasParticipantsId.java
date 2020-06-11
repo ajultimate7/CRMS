@@ -9,7 +9,7 @@ public class ClaimHasParticipantsId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private int claimId;
-	private int employeeId;
+	private ClaimEntity claimId;
+	private EmployeeEntity employeeId;
 
 }

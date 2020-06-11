@@ -24,6 +24,7 @@ public interface SimpleClaimMapper {
 
 	@Mapping(target = "billDate", dateFormat = "dd.mm.yyyy")
 	@Mapping(source = "applicant", target = "employeeId")
+	@Mapping(target = "claimHasParticipants")
 	// @Mapping(target = "category", ignore = true)
 	SimpleClaimDTO entityToDTO(SimpleClaimEntity claim);
 

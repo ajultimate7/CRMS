@@ -6,6 +6,6 @@ import com.neptune.crms.entity.CategoryEntity;
 
 public interface CategoryDAO extends CrudRepository<CategoryEntity, Integer> {
 
-	CategoryEntity findByName(String name);
+	CategoryEntity findByNameIgnoreCase(String name);
 
 }

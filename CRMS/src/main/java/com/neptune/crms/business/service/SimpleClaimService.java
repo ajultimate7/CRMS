@@ -9,10 +9,12 @@ public interface SimpleClaimService {
 
 	List<SimpleClaimDTO> getAllClaims();
 
-	SimpleClaimDTO getById(int id);
+	SimpleClaimDTO getByClaimId(int id);
 
 	List<SimpleClaimDTO> getByEmployeeId(int id);
 
-	void addClaim(SimpleClaimInDTO claim);
+	SimpleClaimDTO addClaim(SimpleClaimInDTO claim);
+
+	SimpleClaimDTO updateClaim(int id, SimpleClaimInDTO claim);
 
 }

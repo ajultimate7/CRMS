@@ -2,8 +2,12 @@ package com.neptune.crms.entity;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,27 +16,33 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.neptune.crms.enumref.ClaimStatusEnum;
+import com.neptune.crms.enums.ClaimStatus;
 
 import lombok.Data;
 
 @Data
 @Entity(name = "claim")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class ClaimEntity {
+@DiscriminatorColumn(name = "claim_type", discriminatorType = DiscriminatorType.INTEGER)
+public class ClaimEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false, updatable = false)
+	@Column(name = "id", insertable = true, nullable = false, updatable = false)
 	private int id;
+
+	@Column(name = "claim_type", insertable = false, nullable = false, updatable = false)
+	private int claimType;
 
 	@Column(name = "amount", nullable = false)
 	private int amount;
+	// BigDecimal
 
 	@Column(name = "city", nullable = false)
 	private String city;
@@ -50,6 +60,7 @@ public abstract class ClaimEntity {
 
 	@Column(name = "bill_no", nullable = false)
 	private String bill_no;
+	// billNo
 
 	@Column(name = "bill_attachment", nullable = false)
 	private String billAttachmentFilePath;
@@ -61,14 +72,11 @@ public abstract class ClaimEntity {
 	@JoinColumn(name = "ref_employee", nullable = false)
 	private EmployeeEntity applicant;
 
-//	@Column(name = "claim_has_participants", nullable = false)
-//	private int claimHasParticipants;
-
-//	@Column(name = "participants", nullable = false)
-//	private List<ClaimHasParticipantsEntity> participants;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "claimEntity")
+	private List<ClaimHasParticipantsEntity> claimHasParticipants;
 
 	@Column(name = "status")
-	private ClaimStatusEnum Status;
+	private ClaimStatus status;
 
 	@Column(name = "approver_remarks")
 	private String approverRemarks;

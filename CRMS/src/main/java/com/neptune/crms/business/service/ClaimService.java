@@ -1,10 +1,16 @@
 package com.neptune.crms.business.service;
 
-import com.neptune.crms.entity.ClaimEntity;
+import java.util.List;
+
+import com.neptune.crms.dto.ClaimDTO;
 
 public interface ClaimService {
 //
-	ClaimEntity getById(int id);
+	ClaimDTO getById(int id);
+
+	void deleteById(int id);
+
+	List<ClaimDTO> getAll();
 //
 //	int getEmployeeId(ClaimEntity claim);
 

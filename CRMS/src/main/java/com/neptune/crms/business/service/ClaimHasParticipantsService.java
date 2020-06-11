@@ -4,13 +4,14 @@ import java.util.List;
 
 import com.neptune.crms.dto.ClaimHasParticipantsDTO;
 import com.neptune.crms.entity.ClaimEntity;
+import com.neptune.crms.entity.ClaimHasParticipantsEntity;
 
 public interface ClaimHasParticipantsService {
 
-	List<ClaimHasParticipantsDTO> getByClaimId(int claimId);
+	List<ClaimHasParticipantsEntity> addParticipants(List<Integer> employeeids, ClaimEntity claimEntity);
 
-	List<ClaimHasParticipantsDTO> getByEmployeeId(int employeeId);
+	List<ClaimHasParticipantsDTO> getByClaimEntity(ClaimEntity claimEntity);
 
-	void addParticipants(List<Integer> employeeids, ClaimEntity claimEntity);
+	List<ClaimHasParticipantsEntity> findByClaimEntity(ClaimEntity claimEntity);
 
 }

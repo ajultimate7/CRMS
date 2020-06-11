@@ -3,12 +3,14 @@ package com.neptune.crms.dto;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.neptune.crms.enumref.ClaimStatusEnum;
+import com.neptune.crms.enums.ClaimStatus;
 
 import lombok.Data;
 
 @Data
 public class SimpleClaimDTO {
+
+	private int id;
 
 	private String claimId;
 
@@ -30,10 +32,10 @@ public class SimpleClaimDTO {
 
 	private int employeeId;
 
-	private List<Integer> participants;
+	private List<ClaimHasParticipantsDTO> claimHasParticipants;
 
 	private String assignedTo;
 
-	private ClaimStatusEnum status;
+	private ClaimStatus status;
 
 }

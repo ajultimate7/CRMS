@@ -7,10 +7,14 @@ import com.neptune.crms.indto.EventClaimInDTO;
 
 public interface EventClaimService {
 
-	List<EventClaimDTO> getAllEventClaims();
+	List<EventClaimDTO> getAllClaims();
 
-	EventClaimDTO getById(int claimId);
+	EventClaimDTO getByClaimId(int id);
 
-	void addEventClaim(EventClaimInDTO eventCLaim);
+	List<EventClaimDTO> getByEmployeeId(int id);
+
+	EventClaimDTO addClaim(EventClaimInDTO claimInDTO);
+
+	EventClaimDTO updateClaim(int id, EventClaimInDTO claimInDTO);
 
 }

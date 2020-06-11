@@ -9,8 +9,10 @@ public interface EventService {
 
 	List<EventDTO> getAll();
 
+	void addEvent(EventInDTO event);
+
 	EventDTO getById(int id);
 
-	void addEvent(EventInDTO event);
+	void deleteById(int id);
 
 }

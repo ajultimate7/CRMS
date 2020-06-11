@@ -36,7 +36,6 @@ public class EventClaimInDTO {
 
 	@NotNull
 	private int employeeId;
-	// private String participants;
 
 	private List<Integer> participantIds;
 

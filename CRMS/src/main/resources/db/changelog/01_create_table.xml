@@ -50,6 +50,9 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    			<column name="contact_no" type="bigInt">
    				<constraints nullable="false"/>
    			</column>
+   			<column name="status" type="integer">
+   				<constraints nullable="false"/>
+   			</column>
    		</createTable>
    		<addUniqueConstraint columnNames="username" tableName="employee"/>
    	</changeSet>
@@ -59,6 +62,9 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    		<createTable tableName="claim" remarks="claim_details">
    			<column name="id" type="integer" autoIncrement="true">
    				<constraints primaryKey="true" primaryKeyName="pk_claim" nullable="false"/>
+   			</column>
+   			<column name="claim_type" type="integer">
+   				<constraints nullable="false"/>
    			</column>
    			<column name="amount" type="decimal(12,2)">
    				<constraints nullable="false"/>
@@ -144,11 +150,14 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    	
    	<changeSet id="7" author="nit160">
    		<createTable tableName="claim_has_participants">
+   			<column name="id" type="integer" autoIncrement="true">
+   				<constraints primaryKey="true" primaryKeyName="pk_claim_has_participants"/>
+   			</column>
    			<column name="ref_claim" type="integer">
-   				<constraints primaryKey="true" primaryKeyName="pk_claim_has_participants_ref_claim" nullable="false"/>
+   				<!-- <constraints primaryKey="true" primaryKeyName="pk_claim_has_participants_ref_claim" nullable="false"/> -->
    			</column>
    			<column name="ref_employee" type="integer">
-   				<constraints primaryKey="true" primaryKeyName="pk_claim_has_participants_ref_employee" nullable="false"/>
+   				<!-- <constraints primaryKey="true" primaryKeyName="pk_claim_has_participants_ref_employee" nullable="false"/> -->
    			</column>
    		</createTable>
    		<addForeignKeyConstraint constraintName="fk_claim_has_participants_ref_claim" referencedTableName="claim" 

@@ -15,7 +15,7 @@ public interface EventClaimMapper {
 	@Mapping(target = "billDate", dateFormat = "dd.mm.yyyy")
 	@Mapping(target = "event", ignore = true)
 	@Mapping(target = "applicant", ignore = true)
-	EventClaimEntity inDTOToentity(EventClaimInDTO event);
+	EventClaimEntity inDTOToEntity(EventClaimInDTO event);
 
 	@Mapping(target = "billDate", dateFormat = "dd.mm.yyyy")
 	@Mapping(target = "event", ignore = true)

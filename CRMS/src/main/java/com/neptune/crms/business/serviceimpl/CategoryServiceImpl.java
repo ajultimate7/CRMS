@@ -11,6 +11,8 @@ import com.neptune.crms.business.service.CategoryService;
 import com.neptune.crms.dao.CategoryDAO;
 import com.neptune.crms.dto.CategoryDTO;
 import com.neptune.crms.entity.CategoryEntity;
+import com.neptune.crms.exceptions.BadRequestException;
+import com.neptune.crms.exceptions.NotFoundException;
 import com.neptune.crms.indto.CategoryInDTO;
 import com.neptune.crms.mapper.CategoryMapper;
 
@@ -31,17 +33,25 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public void addCategory(CategoryInDTO category) {
-		categoryDao.save(categoryMapper.inDTOToEntity(category));
+	public CategoryEntity addCategory(CategoryInDTO category) {
+		if (categoryDao.findByNameIgnoreCase(category.getName()) == null)
+			return categoryDao.save(categoryMapper.inDTOToEntity(category));
+		else
+			throw new BadRequestException("Category already exist");
 	}
 
 	@Override
 	public CategoryDTO getById(int id) {
-		return categoryMapper.entityToDTO(categoryDao.findById(id).get());
+		return categoryMapper.entityToDTO(
+				categoryDao.findById(id).orElseThrow(() -> new NotFoundException("No category found by the given id")));
 	}
 
 	@Override
-	public CategoryDTO getByName(String name) {
-		return categoryMapper.entityToDTO(categoryDao.findByName(name));
+	public void deleteById(int id) {
+		if (categoryDao.existsById(id))
+			categoryDao.deleteById(id);
+		else
+			throw new NotFoundException("No category found for the given id");
 	}
+
 }
