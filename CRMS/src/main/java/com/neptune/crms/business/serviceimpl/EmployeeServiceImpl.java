@@ -1,7 +1,9 @@
 package com.neptune.crms.business.serviceimpl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +14,10 @@ import com.neptune.crms.business.serviceUtil.EmployeeUtil;
 import com.neptune.crms.dao.EmployeeDAO;
 import com.neptune.crms.dto.EmployeeDTO;
 import com.neptune.crms.entity.EmployeeEntity;
-import com.neptune.crms.entity.QEmployeeEntity;
 import com.neptune.crms.enums.EmployeeStatus;
 import com.neptune.crms.exceptions.NotFoundException;
 import com.neptune.crms.indto.EmployeeInDTO;
 import com.neptune.crms.mapper.EmployeeMapper;
-import com.querydsl.core.types.dsl.BooleanExpression;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -35,32 +35,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<EmployeeDTO> getAllEmployees() {
 		List<EmployeeEntity> employees = new ArrayList<>();
 		employeeDao.findAll().forEach(employees::add);
+		Predicate<EmployeeEntity> isInactive = EmployeeEntity -> EmployeeEntity.getStatus()
+				.equals(EmployeeStatus.Inactive);
+		employees.removeIf(isInactive);
 		return employees.stream().map(employeeMapper::entityToDTO).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<EmployeeDTO> getEmployees(String lastName, String firstName, EmployeeStatus status) {
-		QEmployeeEntity employeeEntity = QEmployeeEntity.employeeEntity;
-		BooleanExpression condition;
-		// if (lastName != null)
-		condition = employeeEntity.lastName.equalsIgnoreCase("cartoon");
-//		if (firstName != null)
-//			condition = employeeEntity.firstName.equalsIgnoreCase(firstName);
-//		if (status != null)
-//			condition = employeeEntity.status.eq(status);
-		List<EmployeeEntity> entities = new ArrayList<>();
-		employeeDao.findAll(condition).forEach(entities::add);
-		System.out.println(entities.toString());
-		// return
-		// entities.stream().map(employeeMapper::entityToDTO).collect(Collectors.toList());
-//		if (lastName != null && firstName != null) {
-//			QEmployeeEntity employeeEntity = QEmployeeEntity.employeeEntity;
-//			BooleanExpression condition = employeeEntity.firstName.eq(firstName)
-//					.and(employeeEntity.lastName.eq(lastName));
-//			List<EmployeeEntity> employees = new ArrayList<>();
-//			employeeDao.findAll(condition).forEach(employees::add);
-//			return employees.stream().map(employeeMapper::entityToDTO).collect(Collectors.toList());
-//		}
+	public List<EmployeeDTO> getEmployees(String lastName, String firstName, EmployeeStatus status, Integer id) {
 		if (lastName != null)
 			return employeeDao.findByLastNameIgnoreCase(lastName).stream().map(employeeMapper::entityToDTO)
 					.collect(Collectors.toList());
@@ -70,8 +52,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		else if (status != null)
 			return employeeDao.findByStatus(status).stream().map(employeeMapper::entityToDTO)
 					.collect(Collectors.toList());
+		else if (id != null)
+			return Arrays.asList(getById(id));
+		else if (lastName == null && firstName == null && status == null && id == null)
+			return getAllEmployees();
 		else
-			return null;
+			return Arrays.asList(null);
 		// TODO Instead of null, we can return empty list
 	}
 
@@ -88,28 +74,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 		EmployeeEntity employeeEntity = employeeMapper.inDTOToEntity(employeeInDTO);
 		int count = employeeDao
 				.findByFirstNameAndLastNameIgnoreCase(employeeInDTO.getFirstName(), employeeInDTO.getLastName()).size();
-		employeeEntity.setUsername(employeeEntity.getFirstName() + "." + employeeEntity.getLastName());
+		employeeEntity.setUsername(
+				employeeEntity.getFirstName().toLowerCase() + "." + employeeEntity.getLastName().toLowerCase());
 		if (count > 0)
 			employeeEntity.setUsername(employeeEntity.getUsername() + Integer.toString(count));
-		employeeEntity
-				.setEmailId(employeeEntity.getFirstName() + "." + employeeEntity.getLastName() + "@neptune-ubi.com");
+		employeeEntity.setEmailId(employeeEntity.getFirstName().toLowerCase() + "."
+				+ employeeEntity.getLastName().toLowerCase() + "@neptune-ubi.com");
 		employeeEntity.setStatus(EmployeeStatus.Active);
 		employeeEntity = employeeDao.save(employeeEntity);
 		return employeeMapper.entityToDTO(employeeEntity);
 	}
 
 	@Override
-	public EmployeeDTO activateEmployee(int id) {
+	public EmployeeDTO toggleStatusOfEmployee(int id) {
 		EmployeeEntity entity = employeeMapper.DTOToEntity(getById(id));
-		entity.setStatus(EmployeeStatus.Active);
-		entity = employeeDao.save(entity);
-		return employeeMapper.entityToDTO(entity);
-	}
-
-	@Override
-	public EmployeeDTO deactivateEmployee(int id) {
-		EmployeeEntity entity = employeeMapper.DTOToEntity(getById(id));
-		entity.setStatus(EmployeeStatus.Inactive);
+		if (entity.getStatus() == EmployeeStatus.Inactive)
+			entity.setStatus(EmployeeStatus.Active);
+		else
+			entity.setStatus(EmployeeStatus.Inactive);
 		entity = employeeDao.save(entity);
 		return employeeMapper.entityToDTO(entity);
 	}
@@ -121,4 +103,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 			return true;
 		return false;
 	}
+
+	@Override
+	public EmployeeDTO updateEmployee(EmployeeInDTO employeeInDTO, int id) {
+		if (!employeeDao.existsById(id))
+			throw new NotFoundException("No employee exist by given id");
+		EmployeeEntity employeeEntity = employeeMapper.inDTOToEntity(employeeInDTO);
+		int count = employeeDao
+				.findByFirstNameAndLastNameIgnoreCase(employeeInDTO.getFirstName(), employeeInDTO.getLastName()).size();
+		employeeEntity.setUsername(
+				employeeEntity.getFirstName().toLowerCase() + "." + employeeEntity.getLastName().toLowerCase());
+		if (count > 0)
+			employeeEntity.setUsername(employeeEntity.getUsername() + Integer.toString(count));
+		employeeEntity.setEmailId(employeeEntity.getFirstName().toLowerCase() + "."
+				+ employeeEntity.getLastName().toLowerCase() + "@neptune-ubi.com");
+		employeeEntity.setStatus(EmployeeStatus.Active);
+		employeeEntity.setId(id);
+		System.out.println("Saving updated employee");
+		employeeEntity = employeeDao.save(employeeEntity);
+		System.out.println("Updated employee saved");
+		System.out.println(employeeEntity.toString());
+		return employeeMapper.entityToDTO(employeeEntity);
+	}
+
 }

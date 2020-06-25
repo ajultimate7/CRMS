@@ -41,7 +41,7 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
    			<column name="last_name" type="varchar(16)">
    				<constraints nullable="false"/>
    			</column>
-   			<column name="username" type="varchar(16)">
+   			<column name="username" type="varchar(32)">
    				<constraints nullable="false"/>
    			</column>
    			<column name="email_id" type="varchar(64)">

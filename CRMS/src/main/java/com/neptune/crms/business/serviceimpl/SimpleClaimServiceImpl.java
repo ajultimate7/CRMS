@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.neptune.crms.business.service.CategoryService;
 import com.neptune.crms.business.service.ClaimHasParticipantsService;
+import com.neptune.crms.business.service.ClaimService;
 import com.neptune.crms.business.service.EmployeeService;
 import com.neptune.crms.business.service.SimpleClaimService;
+import com.neptune.crms.business.serviceUtil.ClaimUtil;
 import com.neptune.crms.customgenerators.ClaimIdGenerator;
 import com.neptune.crms.dao.ClaimHasParticipantsDAO;
 import com.neptune.crms.dao.SimpleClaimDAO;
@@ -18,7 +20,6 @@ import com.neptune.crms.dto.SimpleClaimDTO;
 import com.neptune.crms.entity.ClaimHasParticipantsEntity;
 import com.neptune.crms.entity.SimpleClaimEntity;
 import com.neptune.crms.enums.ClaimStatus;
-import com.neptune.crms.exceptions.BadRequestException;
 import com.neptune.crms.exceptions.NoSuchEmployeeExceptions;
 import com.neptune.crms.exceptions.NotFoundException;
 import com.neptune.crms.indto.SimpleClaimInDTO;
@@ -56,6 +57,12 @@ public class SimpleClaimServiceImpl implements SimpleClaimService {
 
 	@Autowired
 	private CategoryService categoryService;
+
+	@Autowired
+	private ClaimUtil claimUtil;
+
+	@Autowired
+	private ClaimService claimService;
 
 	@Autowired
 	private ClaimIdGenerator claimIdGenerator;
@@ -106,15 +113,14 @@ public class SimpleClaimServiceImpl implements SimpleClaimService {
 					claimEntity);
 		}
 
-		if (claimHasParticipantsList == null) {
-			throw new BadRequestException(
-					"All the passed participant employees are not valid employees, can not raise the claim. Retry");
-		} else {
-			claimEntity = simpleClaimDao.save(claimEntity);
-			claimHasParticipantsDao.saveAll(claimHasParticipantsList);
-		}
+		claimEntity = simpleClaimDao.save(claimEntity);
+		claimHasParticipantsDao.saveAll(claimHasParticipantsList);
 
 		claimEntity.setClaimHasParticipants(claimHasParticipantsList);
+
+		System.out.println("Setted the chp attribute n claim entity, showing it "
+				+ claimEntity.getClaimHasParticipants().toString());
+
 		SimpleClaimDTO simpleClaimDTO = simpleClaimMapper.entityToDTO(claimEntity);
 		simpleClaimDTO.setClaimHasParticipants(claimEntity.getClaimHasParticipants().stream()
 				.map(claimHasParticipantsMapper::entityToDTO).collect(Collectors.toList()));
@@ -127,28 +133,24 @@ public class SimpleClaimServiceImpl implements SimpleClaimService {
 		if (simpleClaimDao.existsById(id) == false)
 			throw new NotFoundException("No claim exist by given id");
 		boolean hasAuthortiy = employeeService.checkAuthority(claimInDTO.getEmployeeId());
-		if (hasAuthortiy == false)
+		if (!hasAuthortiy)
 			throw new NoSuchEmployeeExceptions("The employee id " + claimInDTO.getEmployeeId() + " is not active");
 		SimpleClaimEntity claimEntity = simpleClaimMapper.inDTOToEntity(claimInDTO);
 		claimEntity.setCategory(categoryMapper.dtoToEntity(categoryService.getById(claimInDTO.getCategory())));
 		claimEntity.setApplicant(employeeMapper.DTOToEntity(employeeService.getById((claimInDTO.getEmployeeId()))));
 		claimEntity.setStatus(ClaimStatus.Submitted);
 		claimEntity.setId(id);
+		claimIdGenerator.generateClaimId(claimEntity);
 
 		List<ClaimHasParticipantsEntity> claimHasParticipantsList = new ArrayList<>();
 		if (claimInDTO.getParticipantIds() != null) {
 			claimInDTO.getParticipantIds().add(claimInDTO.getEmployeeId());
 			claimHasParticipantsList = claimHasParticipantsService.addParticipants(claimInDTO.getParticipantIds(),
-					claimEntity);
+					claimUtil.getById(id));
 		}
 
-		if (claimHasParticipantsList == null) {
-			throw new BadRequestException(
-					"All the passed participant employees are not valid employees, can not raise the claim. Retry");
-		} else {
-			claimEntity = simpleClaimDao.save(claimEntity);
-			claimHasParticipantsDao.saveAll(claimHasParticipantsList);
-		}
+		claimEntity = simpleClaimDao.save(claimEntity);
+		claimHasParticipantsDao.saveAll(claimHasParticipantsList);
 
 		claimEntity.setClaimHasParticipants(claimHasParticipantsList);
 

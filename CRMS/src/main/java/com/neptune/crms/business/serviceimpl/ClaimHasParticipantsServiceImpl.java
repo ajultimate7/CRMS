@@ -16,7 +16,6 @@ import com.neptune.crms.dto.ClaimHasParticipantsDTO;
 import com.neptune.crms.entity.ClaimEntity;
 import com.neptune.crms.entity.ClaimHasParticipantsEntity;
 import com.neptune.crms.entity.QClaimHasParticipantsEntity;
-import com.neptune.crms.exceptions.NoSuchEmployeeExceptions;
 import com.neptune.crms.mapper.ClaimHasParticipantsMapper;
 import com.neptune.crms.mapper.EmployeeMapper;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -63,38 +62,28 @@ public class ClaimHasParticipantsServiceImpl implements ClaimHasParticipantsServ
 	@Override
 	public List<ClaimHasParticipantsEntity> addParticipants(List<Integer> participantIds, ClaimEntity claimEntity) {
 		List<ClaimHasParticipantsEntity> claimHasParticipantsList = claimEntity.getClaimHasParticipants();
-		if (claimHasParticipantsList == null) {
+		System.out.println("Fetched the list of chpList and showing");
+		if (claimHasParticipantsList == null || claimHasParticipantsList.isEmpty()) {
 			claimHasParticipantsList = new ArrayList<>();
 			for (int id : participantIds) {
-				if (!employeeService.checkAuthority(id))
-					throw new NoSuchEmployeeExceptions("The employee id" + id + " is not active");
-				ClaimHasParticipantsEntity claimHasParticipantsentity = new ClaimHasParticipantsEntity();
-				claimHasParticipantsentity.setClaimEntity(claimEntity);
-				claimHasParticipantsentity.setEmployeeEntity(employeeUtil.getById(id));
-				claimHasParticipantsList.add(claimHasParticipantsentity);
+				if (employeeService.checkAuthority(id)) {
+					ClaimHasParticipantsEntity claimHasParticipantsentity = new ClaimHasParticipantsEntity();
+					claimHasParticipantsentity.setClaimEntity(claimEntity);
+					claimHasParticipantsentity.setEmployeeEntity(employeeUtil.getById(id));
+					claimHasParticipantsList.add(claimHasParticipantsentity);
+				}
 			}
-			if (participantIds.size() == claimHasParticipantsList.size()) {
-				// claimHasParticipantsDao.saveAll(claimHasParticipantsList);
-				return claimHasParticipantsList;
-			} else {
-				System.out.println("inside else after throwing exception of invalid employee");
-				return null;
-			}
-//			if (participantIds.size() != participantsList.size()) {
-//				throw new BadRequestException(
-//						"All the passed participant employees are not valid employees, raising the claim without adding participants");
-//			}
+			return claimHasParticipantsList;
 		}
 
 		else {
-			// List<ClaimHasParticipantsEntity> participantsList =
-			// findByClaimEntity(claimEntity);
-			for (ClaimHasParticipantsEntity entity : claimHasParticipantsList) {
-				claimHasParticipantsDao.deleteById(entity.getId());
+			System.out.println("Inside else as the list is not empty");
+			for (int i = 0; i < claimHasParticipantsList.size(); i++) {
+				claimHasParticipantsDao.deleteById(claimHasParticipantsList.get(i).getId());
+				claimEntity.getClaimHasParticipants().remove(i);
+				System.out.println("size of list is " + claimEntity.getClaimHasParticipants().size());
 			}
 			return addParticipants(participantIds, claimEntity);
 		}
-		// return claimHasParticipantsList;
 	}
-
 }

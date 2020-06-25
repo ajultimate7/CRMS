@@ -12,14 +12,14 @@ public interface EmployeeService {
 
 	EmployeeDTO getById(int id);
 
-	List<EmployeeDTO> getEmployees(String lastName, String firstName, EmployeeStatus status);
+	List<EmployeeDTO> getEmployees(String lastName, String firstName, EmployeeStatus status, Integer id);
 
 	EmployeeDTO save(EmployeeInDTO emp);
 
-	EmployeeDTO activateEmployee(int id);
-
-	EmployeeDTO deactivateEmployee(int id);
+	EmployeeDTO toggleStatusOfEmployee(int id);
 
 	boolean checkAuthority(int id);
+
+	EmployeeDTO updateEmployee(EmployeeInDTO employee, int id);
 
 }
