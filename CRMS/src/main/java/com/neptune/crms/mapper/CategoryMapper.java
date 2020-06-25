@@ -6,13 +6,13 @@ import com.neptune.crms.dto.CategoryDTO;
 import com.neptune.crms.entity.CategoryEntity;
 import com.neptune.crms.indto.CategoryInDTO;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
-
-	CategoryInDTO entityToInDTO(CategoryEntity category);
 
 	CategoryEntity inDTOToEntity(CategoryInDTO category);
 
 	CategoryDTO entityToDTO(CategoryEntity category);
+
+	CategoryEntity dtoToEntity(CategoryDTO category);
 
 }

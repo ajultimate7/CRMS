@@ -1,8 +1,8 @@
-package com.neptune.crms.enumref;
+package com.neptune.crms.enums;
 
 import java.util.stream.Stream;
 
-public enum ClaimStatusEnum {
+public enum ClaimStatus {
 	
 	Submitted(0),
 	InProgress(1),
@@ -12,7 +12,7 @@ public enum ClaimStatusEnum {
 	
 	private int code;
 	
-	private ClaimStatusEnum(int code) {
+	private ClaimStatus(int code) {
 		this.code=code;
 	}
 	

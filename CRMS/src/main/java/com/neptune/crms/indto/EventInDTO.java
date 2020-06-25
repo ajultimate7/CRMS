@@ -1,11 +1,13 @@
 package com.neptune.crms.indto;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.Data;
 
 @Data
 public class EventInDTO {
 
-	private int id;
+	@NotBlank
 	private String name;
 
 }

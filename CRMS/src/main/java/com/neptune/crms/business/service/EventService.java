@@ -1,32 +1,18 @@
 package com.neptune.crms.business.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.neptune.crms.dto.EventDTO;
+import com.neptune.crms.indto.EventInDTO;
 
-import com.neptune.crms.dao.EventDAO;
-import com.neptune.crms.entity.EventEntity;
+public interface EventService {
 
-@Service
-public class EventService {
+	List<EventDTO> getAll();
 
-	@Autowired
-	private EventDAO eventDao;
+	void addEvent(EventInDTO event);
 
-	public List<EventEntity> getAll() {
-		List<EventEntity> events = new ArrayList<>();
-		eventDao.findAll().forEach(events::add);
-		return events;
-	}
+	EventDTO getById(int id);
 
-	public EventEntity getById(int id) {
-		return eventDao.findById(id).get();
-	}
-
-	public void addEvent(EventEntity event) {
-		eventDao.save(event);
-	}
+	void deleteById(int id);
 
 }

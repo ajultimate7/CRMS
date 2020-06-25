@@ -6,13 +6,13 @@ import com.neptune.crms.dto.EventDTO;
 import com.neptune.crms.entity.EventEntity;
 import com.neptune.crms.indto.EventInDTO;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface EventMapper {
-
-	EventInDTO entityToInDTO(EventEntity event);
 
 	EventEntity inDTOToEntity(EventInDTO event);
 
 	EventDTO entityToDTO(EventEntity event);
+
+	EventEntity dtoToEntity(EventDTO event);
 
 }

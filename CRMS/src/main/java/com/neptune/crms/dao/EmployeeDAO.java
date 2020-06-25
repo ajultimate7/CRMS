@@ -2,18 +2,21 @@ package com.neptune.crms.dao;
 
 import java.util.List;
 
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.CrudRepository;
 
 import com.neptune.crms.entity.EmployeeEntity;
+import com.neptune.crms.enums.EmployeeStatus;
 
-public interface EmployeeDAO extends CrudRepository<EmployeeEntity, Integer> {
+public interface EmployeeDAO
+		extends CrudRepository<EmployeeEntity, Integer>, QuerydslPredicateExecutor<EmployeeEntity> {
 
-	List<EmployeeEntity> findByLastName(String lName);
+	List<EmployeeEntity> findByLastNameIgnoreCase(String lName);
 
-//	@Query(value = "from EmployeeEntity e where e.lastName=?1", nativeQuery = false)
-//	List<EmployeeEntity> findAllByLastName(String lastName, Sort sort);
+	List<EmployeeEntity> findByFirstNameIgnoreCase(String firstName);
 
-//	@Query("select e from EmployeeEntity e where e.lastName = 'Jain'")
-	// List<EmployeeEntity> findByLastName();
+	List<EmployeeEntity> findByStatus(EmployeeStatus status);
+
+	List<EmployeeEntity> findByFirstNameAndLastNameIgnoreCase(String firstName, String lastName);
 
 }

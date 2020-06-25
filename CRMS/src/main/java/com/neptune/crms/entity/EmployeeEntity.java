@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.neptune.crms.enums.EmployeeStatus;
+
 import lombok.Data;
 
 @Data
@@ -23,13 +25,16 @@ public class EmployeeEntity {
 	@Column(name = "last_name", nullable = false)
 	private String lastName;
 
-	@Column(name = "username")
+	@Column(name = "username", nullable = false)
 	private String username;
 
-	@Column(name = "email_id")
+	@Column(name = "email_id", nullable = false)
 	private String emailId;
 
 	@Column(name = "contact_no", nullable = false)
 	private Long contactNo;
+
+	@Column(name = "status", nullable = false)
+	private EmployeeStatus status;
 
 }

@@ -1,32 +1,20 @@
 package com.neptune.crms.business.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.neptune.crms.dto.EventClaimDTO;
+import com.neptune.crms.indto.EventClaimInDTO;
 
-import com.neptune.crms.dao.EventClaimDAO;
-import com.neptune.crms.entity.EventClaimEntity;
+public interface EventClaimService {
 
-@Service
-public class EventClaimService {
+	List<EventClaimDTO> getAllClaims();
 
-	@Autowired
-	private EventClaimDAO eventClaimDao;
+	EventClaimDTO getByClaimId(int id);
 
-	public List<EventClaimEntity> getAllEventClaims() {
-		List<EventClaimEntity> eventClaims = new ArrayList<>();
-		eventClaimDao.findAll().forEach(eventClaims::add);
-		return eventClaims;
-	}
+	List<EventClaimDTO> getByEmployeeId(int id);
 
-	public EventClaimEntity getById(String claimId) {
-		return eventClaimDao.findById(claimId).get();
-	}
+	EventClaimDTO addClaim(EventClaimInDTO claimInDTO);
 
-	public void addEventClaim(EventClaimEntity eventCLaim) {
-		eventClaimDao.save(eventCLaim);
-	}
+	EventClaimDTO updateClaim(int id, EventClaimInDTO claimInDTO);
 
 }

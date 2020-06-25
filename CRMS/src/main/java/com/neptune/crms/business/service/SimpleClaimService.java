@@ -1,43 +1,20 @@
 package com.neptune.crms.business.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.neptune.crms.dto.SimpleClaimDTO;
+import com.neptune.crms.indto.SimpleClaimInDTO;
 
-import com.neptune.crms.dao.SimpleClaimDAO;
-import com.neptune.crms.entity.SimpleClaimEntity;
+public interface SimpleClaimService {
 
-@Service
-public class SimpleClaimService {
+	List<SimpleClaimDTO> getAllClaims();
 
-	@Autowired
-	private SimpleClaimDAO simpleClaimDao;
+	SimpleClaimDTO getByClaimId(int id);
 
-	public List<SimpleClaimEntity> getAllClaims() {
-		List<SimpleClaimEntity> claims = new ArrayList<>();
-		simpleClaimDao.findAll().forEach(claims::add);
-		return claims;
-	}
+	List<SimpleClaimDTO> getByEmployeeId(int id);
 
-	public SimpleClaimEntity getById(String id) {
-		return simpleClaimDao.findById(id).get();
-	}
+	SimpleClaimDTO addClaim(SimpleClaimInDTO claim);
 
-	public List<SimpleClaimEntity> getByEmployeeId(int id) {
-		List<SimpleClaimEntity> allClaimsByEmployee = new ArrayList<>();
-		List<SimpleClaimEntity> claims = new ArrayList<>();
-		simpleClaimDao.findAll().forEach(claims::add);
-		for (SimpleClaimEntity claim : claims) {
-			if (claim.getApplicant().getId() == id)
-				allClaimsByEmployee.add(claim);
-		}
-		return allClaimsByEmployee;
-	}
-
-	public void addClaim(SimpleClaimEntity claim) {
-		simpleClaimDao.save(claim);
-	}
+	SimpleClaimDTO updateClaim(int id, SimpleClaimInDTO claim);
 
 }

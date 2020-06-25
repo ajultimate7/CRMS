@@ -2,6 +2,8 @@ package com.neptune.crms.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.Data;
@@ -11,7 +13,8 @@ import lombok.Data;
 public class EventEntity {
 
 	@Id
-	@Column(name = "id", nullable = false)
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name = "name", nullable = false)
