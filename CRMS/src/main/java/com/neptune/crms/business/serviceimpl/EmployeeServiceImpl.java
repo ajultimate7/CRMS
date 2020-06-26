@@ -1,7 +1,6 @@
 package com.neptune.crms.business.serviceimpl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -18,6 +17,8 @@ import com.neptune.crms.enums.EmployeeStatus;
 import com.neptune.crms.exceptions.NotFoundException;
 import com.neptune.crms.indto.EmployeeInDTO;
 import com.neptune.crms.mapper.EmployeeMapper;
+import com.neptune.crms.predicates.EmployeePredicate;
+import com.querydsl.core.BooleanBuilder;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -31,6 +32,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	private EmployeeUtil employeeUtil;
 
+	@Autowired
+	private EmployeePredicate employeePredicate;
+
 	@Override
 	public List<EmployeeDTO> getAllEmployees() {
 		List<EmployeeEntity> employees = new ArrayList<>();
@@ -43,21 +47,44 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<EmployeeDTO> getEmployees(String lastName, String firstName, EmployeeStatus status, Integer id) {
-		if (lastName != null)
-			return employeeDao.findByLastNameIgnoreCase(lastName).stream().map(employeeMapper::entityToDTO)
-					.collect(Collectors.toList());
-		else if (firstName != null)
-			return employeeDao.findByFirstNameIgnoreCase(firstName).stream().map(employeeMapper::entityToDTO)
-					.collect(Collectors.toList());
-		else if (status != null)
-			return employeeDao.findByStatus(status).stream().map(employeeMapper::entityToDTO)
-					.collect(Collectors.toList());
-		else if (id != null)
-			return Arrays.asList(getById(id));
-		else if (lastName == null && firstName == null && status == null && id == null)
-			return getAllEmployees();
-		else
-			return Arrays.asList(null);
+		List<EmployeeEntity> employeeList = new ArrayList<>();
+//		QEmployeeEntity employee = QEmployeeEntity.employeeEntity;
+////		BooleanExpression hasFirstName = employee.firstName.isNotNull();
+//		BooleanExpression queryOnFirstName = employee.firstName.eq(firstName);
+//		employeeDao.findAll(queryOnFirstName).forEach(employeeList::add);
+//		return employeeList.stream().map(employeeMapper::entityToDTO).collect(Collectors.toList());
+		BooleanBuilder where = new BooleanBuilder();
+		if (firstName != null) {
+			where.and(employeePredicate.firstNameEq(firstName));
+		}
+		if (lastName != null) {
+			where.and(employeePredicate.lastNameEq(lastName));
+		}
+		if (status != null) {
+			where.and(employeePredicate.statusEq(status));
+		}
+		if (id != null) {
+			where.and(employeePredicate.idEq(id));
+		}
+
+		employeeDao.findAll(where).forEach(employeeList::add);
+		return employeeList.stream().map(employeeMapper::entityToDTO).collect(Collectors.toList());
+
+//		if (lastName != null)
+//			return employeeDao.findByLastNameIgnoreCase(lastName).stream().map(employeeMapper::entityToDTO)
+//					.collect(Collectors.toList());
+//		else if (firstName != null)
+//			return employeeDao.findByFirstNameIgnoreCase(firstName).stream().map(employeeMapper::entityToDTO)
+//					.collect(Collectors.toList());
+//		else if (status != null)
+//			return employeeDao.findByStatus(status).stream().map(employeeMapper::entityToDTO)
+//					.collect(Collectors.toList());
+//		else if (id != null)
+//			return Arrays.asList(getById(id));
+//		else if (lastName == null && firstName == null && status == null && id == null)
+//			return getAllEmployees();
+//		else
+//			return Arrays.asList(null);
 		// TODO Instead of null, we can return empty list
 	}
 

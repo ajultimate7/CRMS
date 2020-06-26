@@ -2,14 +2,13 @@ package com.neptune.crms.dao;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.CrudRepository;
 
 import com.neptune.crms.entity.EmployeeEntity;
 import com.neptune.crms.enums.EmployeeStatus;
 
-public interface EmployeeDAO
-		extends CrudRepository<EmployeeEntity, Integer>, QuerydslPredicateExecutor<EmployeeEntity> {
+public interface EmployeeDAO extends JpaRepository<EmployeeEntity, Integer>, QuerydslPredicateExecutor<EmployeeEntity> {
 
 	List<EmployeeEntity> findByLastNameIgnoreCase(String lName);
 
