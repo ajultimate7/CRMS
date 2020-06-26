@@ -154,8 +154,6 @@ public class SimpleClaimServiceImpl implements SimpleClaimService {
 
 		claimEntity.setClaimHasParticipants(claimHasParticipantsList);
 
-		// claimEntity = simpleClaimDao.save(claimEntity);
-
 		SimpleClaimDTO simpleClaimDTO = simpleClaimMapper.entityToDTO(claimEntity);
 		simpleClaimDTO.setClaimHasParticipants(claimEntity.getClaimHasParticipants().stream()
 				.map(claimHasParticipantsMapper::entityToDTO).collect(Collectors.toList()));
